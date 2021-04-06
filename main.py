@@ -7,10 +7,10 @@ from dataset import Dataset
 from model import LeNet5, CustomMLP
 import numpy as np
 import matplotlib.pyplot as plt
+import wandb
 
 
-
-def train(model, trn_loader, device, criterion, optimizer):
+def train(model, trn_loader, device, criterion, optimizer,epoch,modelname):
     """ Train function
 
     Args:
@@ -25,56 +25,41 @@ def train(model, trn_loader, device, criterion, optimizer):
         acc: accuracy
     """
     model.to(device)
-    train_loss = 0
-    trainacc = 0
-    trn_loss, acc = [],[]
-    for i, (images, labels) in enumerate(trn_loader):
-        # images = images.to(device)
-        # labels = labels.to(device)
-        images = images.cuda()
-        labels = labels.cuda()
-        # 확실히 실행되는지 보장이 안됨
-        # 안될 시 .to(device) -> .cuda()로 변경
-
-
-
-        outputs = model(images)
-
-        loss = criterion(outputs, labels)
-        train_loss += loss
-
-        # print("알규맥스",torch.argmax(outputs, dim=1))
-        # print("아웃풋",outputs[1])
-        # print("아웃풋전부", outputs)
-        # print("셰이프",(outputs[1]).shape)
-        # print("라벨",labels)
-        # print(torch.float(torch.argmax(outputs, dim=1)) == torch.float(labels))
-        # correct= (torch.argmax(outputs, dim=1)==labels,dtype=torch.float)
-        # correct = torch.mean(torch.eq(torch.argmax(outputs, dim=1), labels).to(dtype=torch.float64))
-
-        temp_acc = torch.mean(torch.eq(torch.argmax(outputs, dim=1), labels).to(dtype=torch.float64))
-
-
-        trainacc += temp_acc
-
-
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        if (i) % 100 == 0:
-            print(" Step [{}] Loss: {:.4f} acc: {:.4f}".format(i, loss.item(), temp_acc))
-            print("label", labels)
-            print("output", torch.argmax(outputs, dim=1))
-            trn_loss.append(loss.item())
-            acc.append(temp_acc.item())
-
-    trainacc = trainacc/trn_loader.__len__()
-    train_loss = train_loss / (trn_loader.__len__())     #10은 batchsize, 원래는 argument로 받아와서 사용가능
-    print("The result Step [{}] Loss: {:.4f} acc: {:.4f}".format(trn_loader.__len__(), train_loss, trainacc))
-    trn_loss=np.array(trn_loss)
+    trn_loss, acc = [], []
+    for m in range(epoch):
+        train_loss = 0
+        trainacc = 0
+        for i, (images, labels) in enumerate(trn_loader):
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+            train_loss += loss
+            temp_acc = torch.mean(torch.eq(torch.argmax(outputs, dim=1), labels).to(dtype=torch.float64))
+            trainacc += temp_acc
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            if (i) % 1000 == 0:
+                print("\r Step [{}] Loss: {:.4f} acc: {:.4f}\nlabel".format(i, loss.item(), temp_acc),labels,"\n output", torch.argmax(outputs, dim=1))
+                break
+        trainacc = trainacc / trn_loader.__len__()
+        train_loss = train_loss / (trn_loader.__len__())     #10은 batchsize, 원래는 argument로 받아와서 사용가능
+        print("The {} epoch  Loss: {:.4f} acc: {:.4f}".format(m, train_loss, trainacc))
+        trn_loss.append(train_loss.item())
+        acc.append(trainacc.item())
+        wandb.log({"Acc": trainacc,
+                   "loss": train_loss})
+    trn_loss = np.array(trn_loss)
     acc=np.array(acc)
+    dummy_input = torch.randn(1,1,28,28,device=device)
+    input_names = ["input_0"]
+    output_names = ["output_0"]
+    dummy_output = model(dummy_input)
+    torch.onnx.export(model, dummy_input, "{}.onnx".format(modelname), verbose=True, input_names=input_names,output_names=output_names)
+
+
+
     return trn_loss, acc
 
 
@@ -99,16 +84,11 @@ def test(model, tst_loader, device, criterion):
         for i, (images, labels) in enumerate(tst_loader):
             images = images.to(device)
             labels = labels.to(device)
-            # 확실히 실행되는지 보장이 안됨
-            # 안될 시 .to(device) -> .cuda()로 변경
-
             outputs = model(images)
             loss = criterion(outputs, labels)
             test_loss += loss
             temp_acc = torch.mean(torch.eq(torch.argmax(outputs, dim=1), labels).to(dtype=torch.float64))
             test_acc += temp_acc
-
-
             if (i) % 100 == 0:
                 print(" Step [{}] Loss: {:.4f} acc: {:.4f}".format(i, loss.item(), temp_acc))
                 print("label", labels)
@@ -117,8 +97,8 @@ def test(model, tst_loader, device, criterion):
                 acc.append(temp_acc.item())
 
         test_acc = test_acc/tst_loader.__len__()
-        test_loss = test_loss / (tst_loader.__len__())     #10은 batchsize, 원래는 argument로 받아와서 사용가능
-        print("The result Step [{}] Loss: {:.4f} acc: {:.4f}".format(tst_loader.__len__(), test_loss, test_acc))
+        test_loss = test_loss / (tst_loader.__len__())
+        print("TEST Step [{}] Loss: {:.4f} acc: {:.4f}".format(tst_loader.__len__(), test_loss, test_acc))
     tst_loss=np.array(tst_loss).astype(float)
     acc=np.array(acc).astype(float)
 
@@ -128,10 +108,6 @@ def test(model, tst_loader, device, criterion):
 
 
 # import some packages you need here
-
-
-
-
 
 def main():
     """ Main function
@@ -144,12 +120,13 @@ def main():
         5) cost function: use torch.nn.CrossEntropyLoss
 
     """
-
-    # roottrain='E:/document/programing/mnisttest/data/test'
-    # roottest ='E:/document/programing/mnisttest/data/train'
+    wandb.init(project="simple_MNIST_report", config={
+    })
     roottrain='data/train'
     roottest ='data/test'
+    epoch = 1
 
+    # declare pipeline
     trainloader = DataLoader(dataset=Dataset(root=roottrain),  #################################################
                          batch_size=10,
                          shuffle=True)
@@ -157,37 +134,31 @@ def main():
                         batch_size=10,
                         shuffle=False)
     device = torch.device("cuda:0")
-    # model = CustomMLP()
 
-    model = LeNet5()
+
+    #declare model and opt and loss
+    LeNet5_model = LeNet5()
     criterionLeNet = torch.nn.CrossEntropyLoss()
-    optimizerLeNet = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+    optimizerLeNet = torch.optim.SGD(LeNet5_model.parameters(), lr=0.01, momentum=0.9)
 
-    lenet5trnloss, lenet5trnacc = train(model=model, trn_loader=trainloader, device=device, criterion=criterionLeNet,
-                                        optimizer=optimizerLeNet)
-    lenet5tstloss, lenet5tstacc = test(model=model, tst_loader=testloader, device=device, criterion=criterionLeNet)
-
-
-    model = CustomMLP()
+    CustomMLP_model = CustomMLP()
     criterionCustomMLP = torch.nn.CrossEntropyLoss()
-    optimizerCustomMLP = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+    optimizerCustomMLP = torch.optim.SGD(CustomMLP_model.parameters(), lr=0.01, momentum=0.9)
 
-    CustomMLPtrnloss, CustomMLPtrnacc = train(model=model, trn_loader=trainloader, device=device,
-                                              criterion=criterionCustomMLP, optimizer=optimizerCustomMLP)
-    CustomMLPtstloss, CustomMLPtstacc = test(model=model, tst_loader=testloader, device=device, criterion=criterionCustomMLP)
+    wandb.watch(
+        LeNet5_model,
+        CustomMLP_model)
+####################################################################################
+    #start training
 
+    lenet5trnloss, lenet5trnacc = train(model=LeNet5_model, trn_loader=trainloader, device=device, criterion=criterionLeNet,
+                                        optimizer=optimizerLeNet,epoch=epoch,modelname="lenet")
+    lenet5tstloss, lenet5tstacc = test(model=LeNet5_model, tst_loader=testloader, device=device, criterion=criterionLeNet)
 
-    # device = torch.device("cuda:0")
-    # # model = CustomMLP()
-    # model = LeNet5()
-    #
-    # criterion = torch.nn.CrossEntropyLoss()
-    # optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
-    # lenet5trnloss,lenet5trnacc=train(model = model, trn_loader=trainloader, device=device, criterion=criterion, optimizer=optimizer)
-    # lenet5tstloss,lenet5tstacc=test(model=model, tst_loader=testloader, device=device, criterion=criterion)
-    # model = CustomMLP()
-    # CustomMLPtrnloss,CustomMLPtrnacc=train(model = model, trn_loader=trainloader, device=device, criterion=criterion, optimizer=optimizer)
-    # CustomMLPtstloss,CustomMLPtstacc=test(model=model, tst_loader=testloader, device=device, criterion=criterion)
+    CustomMLPtrnloss, CustomMLPtrnacc = train(model=CustomMLP_model, trn_loader=trainloader, device=device,
+                                              criterion=criterionCustomMLP, optimizer=optimizerCustomMLP,epoch=epoch,modelname="custom")
+    CustomMLPtstloss, CustomMLPtstacc = test(model=CustomMLP_model, tst_loader=testloader, device=device, criterion=criterionCustomMLP)
+
 
     fig= plt.figure()
 
@@ -233,3 +204,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+    ### MNIST WEB app with python - Flask  http://hanwifi.iptime.org:9000/
+    ### 19512062 young il han
+    ### ccoltong1215@seoultech.ac.kr
+    ### https://github.com/ccoltong1215/simple-lenet5-torch-mnist

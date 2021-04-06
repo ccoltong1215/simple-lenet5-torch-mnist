@@ -15,14 +15,9 @@ def label(input_list):
     # onehot_label = (label_array.T == unique_label_names).astype(np.long)               #라벨 어레이 에서 트랜스폼하여 float32로 변환 하여 겹치는것만 참값으로 받고, 참값을 int로 받으면 원핫인코딩 완성
     return label_list
 
-# transform = T.Compose([T.ToTensor()])
 transform = T.Compose(
     [T.ToTensor(),
-    # torch.clamp(,min=0,max=1)
      T.Normalize([0.1307], [0.3081])])
-# transform = T.Compose(
-#     [T.ToTensor(),
-#      T.Normalize((0.1307,0.1307,0.1307), (0.3081,0.3081,0.3081))])
 
 
 
@@ -33,14 +28,9 @@ class Dataset(data.Dataset):
         self.input_list = sorted(glob(join(root, '*.png')))
         self.label_list = label(self.input_list)
 
-
     def __getitem__(self, index):
-
         return transform(Image.open(self.input_list[index])),\
                torch.tensor(self.label_list[index])
-
-    # normalize = T.Normalize(mean=[0.485, 0.456, 0.406],
-    #                                  std=[0.229, 0.224, 0.225])
 
     def __len__(self):
         return self.input_list.__len__()
