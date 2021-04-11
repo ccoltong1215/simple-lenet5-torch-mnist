@@ -66,9 +66,9 @@ class CustomMLP(nn.Module):
             ('relu2', nn.ReLU()),
             ('FC4', nn.Linear(60,60)),      #params 3600  , 7,230-3600 = 3630
             ('relu2', nn.ReLU()),
-            ('FC4', nn.Linear(60, 52)),     # params 3120  , 3630-3120 = 510
+            ('FC5', nn.Linear(60, 52)),     # params 3120  , 3630-3120 = 510
             ('relu2', nn.ReLU()),
-            ('FC4', nn.Linear(52, 10)),     # params 520  , 510-520 = -10
+            ('FC6', nn.Linear(52, 10)),     # params 520  , 510-520 = -10
             ('softmax', nn.Softmax())
         ]))
 

@@ -10,14 +10,11 @@ def label(input_list):
     label_list = []
     for path in input_list:
         label_list.append(int((path.split('.')[-2])[-1:]))  #각 이미지별라벨 추출
-    # unique_label_names = np.unique(label_list)              #라벨 별 중복값 제거하고 총 라벨 호출
-    # label_array = np.tile(np.array(label_list), 10).reshape(-1, label_list.__len__())   #라벨리스트를 0,1,2,3,4,5,6,7,8,9 *10 으로 변환
-    # onehot_label = (label_array.T == unique_label_names).astype(np.long)               #라벨 어레이 에서 트랜스폼하여 float32로 변환 하여 겹치는것만 참값으로 받고, 참값을 int로 받으면 원핫인코딩 완성
     return label_list
 
 transform = T.Compose(
-    [T.ToTensor(),
-     T.Normalize([0.1307], [0.3081])])
+    [T.ToTensor(),#0~1 transform
+     T.Normalize([0.1307], [0.3081])])#normalize
 
 
 
