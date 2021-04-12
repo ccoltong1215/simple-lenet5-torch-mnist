@@ -1,0 +1,28 @@
+2021-04-12 00:34:39,209 INFO    MainThread:30080 [internal.py:wandb_internal():91] W&B internal server running at pid: 30080, started at: 2021-04-12 00:34:39.201820
+2021-04-12 00:34:39,211 INFO    WriterThread:30080 [datastore.py:open_for_write():77] open: D:\han\programing\pytorch\simple-lenet5-torch-cnn\wandb\run-20210412_003433-4m4jz07c\run-4m4jz07c.wandb
+2021-04-12 00:34:39,211 DEBUG   HandlerThread:30080 [handler.py:handle_request():120] handle_request: check_version
+2021-04-12 00:34:39,213 DEBUG   SenderThread:30080 [sender.py:send():160] send: header
+2021-04-12 00:34:39,213 DEBUG   SenderThread:30080 [sender.py:send():160] send: request
+2021-04-12 00:34:39,213 DEBUG   SenderThread:30080 [sender.py:send_request():169] send_request: check_version
+2021-04-12 00:34:39,550 DEBUG   SenderThread:30080 [sender.py:send():160] send: run
+2021-04-12 00:34:39,860 INFO    SenderThread:30080 [sender.py:_start_run_threads():654] run started: 4m4jz07c with start time 1618155278
+2021-04-12 00:34:39,860 DEBUG   SenderThread:30080 [sender.py:send():160] send: summary
+2021-04-12 00:34:39,860 DEBUG   HandlerThread:30080 [handler.py:handle_request():120] handle_request: run_start
+2021-04-12 00:34:39,860 INFO    SenderThread:30080 [sender.py:_save_file():781] saving file wandb-summary.json with policy end
+2021-04-12 00:34:41,779 DEBUG   HandlerThread:30080 [meta.py:__init__():34] meta init
+2021-04-12 00:34:41,779 DEBUG   HandlerThread:30080 [meta.py:__init__():48] meta init done
+2021-04-12 00:34:41,779 DEBUG   HandlerThread:30080 [meta.py:probe():190] probe
+2021-04-12 00:34:41,796 DEBUG   HandlerThread:30080 [meta.py:_save_code():69] save code
+2021-04-12 00:34:41,798 DEBUG   HandlerThread:30080 [meta.py:_save_code():90] save code done
+2021-04-12 00:34:41,798 DEBUG   HandlerThread:30080 [meta.py:_save_pip():52] save pip
+2021-04-12 00:34:41,799 DEBUG   HandlerThread:30080 [meta.py:_save_pip():66] save pip done
+2021-04-12 00:34:41,799 DEBUG   HandlerThread:30080 [meta.py:probe():231] probe done
+2021-04-12 00:34:41,820 DEBUG   SenderThread:30080 [sender.py:send():160] send: files
+2021-04-12 00:34:41,820 INFO    SenderThread:30080 [sender.py:_save_file():781] saving file wandb-metadata.json with policy now
+2021-04-12 00:34:41,821 INFO    SenderThread:30080 [sender.py:_save_file():781] saving file code\main.py with policy now
+2021-04-12 00:34:41,834 DEBUG   HandlerThread:30080 [handler.py:handle_request():120] handle_request: status
+2021-04-12 00:34:41,834 DEBUG   SenderThread:30080 [sender.py:send():160] send: request
+2021-04-12 00:34:41,834 DEBUG   SenderThread:30080 [sender.py:send_request():169] send_request: status
+2021-04-12 00:34:57,124 DEBUG   HandlerThread:30080 [handler.py:handle_request():120] handle_request: status
+2021-04-12 00:34:57,124 DEBUG   SenderThread:30080 [sender.py:send():160] send: request
+2021-04-12 00:34:57,124 DEBUG   SenderThread:30080 [sender.py:send_request():169] send_request: status

@@ -15,19 +15,29 @@ def label(input_list):
 transform = T.Compose(
     [T.ToTensor(),#0~1 transform
      T.Normalize([0.1307], [0.3081])])#normalize
+transform_ = T.Compose(
+    [T.ToTensor() ])#0~1 transform#normalize
+
 
 
 
 class Dataset(data.Dataset):
 
-    def __init__(self, root):
+    def __init__(self, root,normalize):
+        self.normalize = normalize
 
         self.input_list = sorted(glob(join(root, '*.png')))
         self.label_list = label(self.input_list)
 
     def __getitem__(self, index):
-        return transform(Image.open(self.input_list[index])),\
-               torch.tensor(self.label_list[index])
+        if self.normalize:
+            image = transform(Image.open(self.input_list[index]))
+            label = torch.tensor(self.label_list[index])
+        else:
+            image = transform_(Image.open(self.input_list[index]))
+            label = torch.tensor(self.label_list[index])
+
+        return image,label
 
     def __len__(self):
         return self.input_list.__len__()

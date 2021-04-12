@@ -1,0 +1,18 @@
+{
+    "os": "Windows-10-10.0.19041-SP0",
+    "python": "3.6.5",
+    "heartbeatAt": "2021-04-11T15:21:35.201381",
+    "startedAt": "2021-04-11T15:21:26.791483",
+    "docker": null,
+    "gpu": "NVIDIA GeForce GTX 1060 3GB",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "D:/han/programing/pytorch/simple-lenet5-torch-cnn/main.py",
+    "codePath": "main.py",
+    "host": "HANPC",
+    "username": "ccolt",
+    "executable": "C:\\ProgramData\\Anaconda3\\python.exe"
+}

@@ -1,0 +1,24 @@
+2021-04-12 00:28:58,047 INFO    MainThread:30412 [wandb_setup.py:_flush():69] setting env: {}
+2021-04-12 00:28:58,048 INFO    MainThread:30412 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-12 00:28:58,048 INFO    MainThread:30412 [wandb_init.py:_log_setup():336] Logging user logs to D:\han\programing\pytorch\simple-lenet5-torch-cnn\wandb\run-20210412_002858-1wjrxqr7\logs\debug.log
+2021-04-12 00:28:58,048 INFO    MainThread:30412 [wandb_init.py:_log_setup():337] Logging internal logs to D:\han\programing\pytorch\simple-lenet5-torch-cnn\wandb\run-20210412_002858-1wjrxqr7\logs\debug-internal.log
+2021-04-12 00:28:58,048 INFO    MainThread:30412 [wandb_init.py:init():369] calling init triggers
+2021-04-12 00:28:58,048 INFO    MainThread:30412 [wandb_init.py:init():376] wandb.init called with sweep_config: {}
+config: {}
+2021-04-12 00:28:58,049 INFO    MainThread:30412 [wandb_init.py:init():418] starting backend
+2021-04-12 00:28:58,049 INFO    MainThread:30412 [backend.py:_multiprocessing_setup():71] multiprocessing start_methods=spawn, using: spawn
+2021-04-12 00:28:58,061 INFO    MainThread:30412 [backend.py:ensure_launched():123] starting backend process...
+2021-04-12 00:29:03,150 INFO    MainThread:30412 [backend.py:ensure_launched():128] started backend process with pid: 32020
+2021-04-12 00:29:03,151 INFO    MainThread:30412 [wandb_init.py:init():423] backend started and connected
+2021-04-12 00:29:03,151 INFO    MainThread:30412 [wandb_init.py:init():463] updated telemetry
+2021-04-12 00:29:03,152 INFO    MainThread:30412 [wandb_init.py:init():482] communicating current version
+2021-04-12 00:29:04,244 INFO    MainThread:30412 [wandb_init.py:init():487] got version response 
+2021-04-12 00:29:04,244 INFO    MainThread:30412 [wandb_init.py:init():495] communicating run to backend with 30 second timeout
+2021-04-12 00:29:04,578 INFO    MainThread:30412 [wandb_init.py:init():520] starting run threads in backend
+2021-04-12 00:29:06,514 INFO    MainThread:30412 [wandb_run.py:_console_start():1524] atexit reg
+2021-04-12 00:29:06,515 INFO    MainThread:30412 [wandb_run.py:_redirect():1371] redirect: SettingsConsole.WRAP
+2021-04-12 00:29:06,515 INFO    MainThread:30412 [wandb_run.py:_redirect():1414] Wrapping output streams.
+2021-04-12 00:29:06,515 INFO    MainThread:30412 [wandb_run.py:_redirect():1438] Redirects installed.
+2021-04-12 00:29:06,515 INFO    MainThread:30412 [wandb_init.py:init():544] run started, returning control to user process
+2021-04-12 00:29:07,071 INFO    MainThread:30412 [wandb_watch.py:watch():39] Watching
+2021-04-12 00:29:07,071 INFO    MainThread:30412 [wandb_watch.py:watch():39] Watching
