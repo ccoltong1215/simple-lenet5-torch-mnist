@@ -78,7 +78,7 @@ jupyter-console==5.2.0
 jupyter-core==4.4.0
 jupyter==1.0.0
 jupyterlab-launcher==0.10.5
-jupyterlab==0.32.1
+jupyterlab==1.2.21
 keras-applications==1.0.8
 keras-preprocessing==1.1.0
 kiwisolver==1.0.1
